@@ -1,0 +1,1 @@
+cp ./obj/asp.bin /mnt/c/Users/tenma/Desktop/STM32BUILDER
