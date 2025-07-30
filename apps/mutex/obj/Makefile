@@ -66,7 +66,7 @@ endif
 #
 #  ソースファイルのディレクトリの定義
 #
-SRCDIR = /home/tenma/EmbededPractice/TOPPERS_PROJECTS/asp3
+SRCDIR = ../../../asp3
 
 #
 #  オブジェクトファイル名の拡張子の設定
@@ -194,23 +194,31 @@ CFLAGS = $(COPTS) $(CDEFS) $(INCLUDES)
 #
 #  アプリケーションプログラムに関する定義
 #
-APPLNAME = mbeded_shield_sample
-APPLDIRS = ../mbeded_shield_sample_src
-APPL_CFG = mbeded_shield_sample.cfg
-APPL_CDL = mbeded_shield_sample.cdl
+APPLNAME = main
+APPLDIRS = ../src ../include
+APPL_CFG = ../cfg/main.cfg
+APPL_CDL = ../cdl/main.cdl
 
 APPL_DIRS := $(APPLDIRS) $(SRCDIR)/library
 APPL_ASMOBJS :=
 ifdef USE_CXX
-	APPL_CXXOBJS := mbeded_shield_sample.o
+	APPL_CXXOBJS := main.o
 	APPL_COBJS :=
 else
-	APPL_COBJS := mbeded_shield_sample.o
+	APPL_C_SRCS := $(foreach dir,$(APPLDIRS),$(wildcard $(dir)/*.c))
+	APPL_C_FILES := $(notdir $(APPL_C_SRCS))
+	APPL_C_BASENAMES := $(basename $(APPL_C_FILES))
+	APPL_C_OBJS := $(addsuffix .o,$(APPL_C_BASENAMES))
+	APPL_COBJS := $(APPL_C_OBJS)  
 endif
+
+
+
+
 APPL_COBJS := $(APPL_COBJS) log_output.o vasyslog.o t_perror.o strerror.o
 APPL_CFLAGS := $(APPL_CFLAGS) 
 ifdef APPLDIRS
-	INCLUDES := $(INCLUDES) $(foreach dir,$(APPLDIRS),-I$(dir))
+	INCLUDES := $(INCLUDES) $(foreach dir,$(APPLDIRS),-I$(dir) -I$(dir)/include)
 endif
 
 #

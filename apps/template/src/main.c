@@ -25,3 +25,25 @@ void led_task(EXINF exinf)
 
     ext_tsk();
 }
+
+
+void sw_task(EXINF exinf)
+{
+    RCC_AHB1ENR |= (1<<1); 
+    GPIOB_MODER &= ~(0b11 << (5 * 2));   // 入力モード
+    GPIOB_PUPDR &= ~(0b11 << (5 * 2));   // PUPDR初期化
+    GPIOB_PUPDR |=  (0b01 << (5 * 2));   // プルアップ
+
+
+    uint8_t prev = (GPIOB_IDR & (1 << 5)) ? 1 : 0;
+    while(1)
+    {
+        uint8_t curr = (GPIOB_IDR & (1 << 5)) ? 1 : 0;
+        if (prev == 1 && curr == 0)
+        {
+            syslog(LOG_NOTICE, "Button Pressed"); 
+        }
+        prev =curr;
+        dly_tsk(10000);
+    }
+}

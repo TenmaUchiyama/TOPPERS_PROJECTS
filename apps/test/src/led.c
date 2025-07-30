@@ -11,15 +11,16 @@ void led_task(EXINF exinf)
 {
     syslog(LOG_NOTICE, "LED TASK START"); 
 
-    RCC_AHB1ENR |= (1 << 0); 
-
-
-    GPIOA_MODER &= ~(0b11 << (9 * 2));
-    GPIOA_MODER |= (0b01 << (9*2));
+    
 
     while(1)
     {
+        FLGPTN actual_flg;
+
+        wai_flg(MY_FLG, LED_ON, TA_WMUL, &actual_flg); 
+        syslog(LOG_NOTICE, "FLAG UP");
         GPIOA_ODR ^= (1 << 9);
+        clr_flg(MY_FLG , 0x00);
         dly_tsk(1000000);
     }
 
