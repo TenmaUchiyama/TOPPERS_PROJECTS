@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "mbeded_shield_sample.h": "c",
+        "kernel.h": "c",
+        "event_flag.h": "c"
+    }
+}
