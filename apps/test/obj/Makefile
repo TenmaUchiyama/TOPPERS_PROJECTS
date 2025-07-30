@@ -205,8 +205,16 @@ ifdef USE_CXX
 	APPL_CXXOBJS := main.o
 	APPL_COBJS :=
 else
-	APPL_COBJS := main.o
+	APPL_C_SRCS := $(foreach dir,$(APPLDIRS),$(wildcard $(dir)/*.c))
+	APPL_C_FILES := $(notdir $(APPL_C_SRCS))
+	APPL_C_BASENAMES := $(basename $(APPL_C_FILES))
+	APPL_C_OBJS := $(addsuffix .o,$(APPL_C_BASENAMES))
+	APPL_COBJS := $(APPL_C_OBJS)  
 endif
+
+
+
+
 APPL_COBJS := $(APPL_COBJS) log_output.o vasyslog.o t_perror.o strerror.o
 APPL_CFLAGS := $(APPL_CFLAGS) 
 ifdef APPLDIRS

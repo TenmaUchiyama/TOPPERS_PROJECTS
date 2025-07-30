@@ -1,7 +1,7 @@
 #include <kernel.h>
 #include <t_syslog.h> 
 #include "kernel_cfg.h"
-#include "../include/main.h"
+#include "main.h"
 #include "REG.h"
 
 
