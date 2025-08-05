@@ -3,8 +3,9 @@
 #ifndef TOPPERS_MACRO_ONLY
 
 
-extern void led_task(EXINF exinf);
+extern void init_gpio(EXINF exinf);
+extern void led_flashing(EXINF exinf);
 extern void sw_task(EXINF exinf);
-extern void init(EXINF exinf);
+
 #endif /* TOPPERS_MACRO_ONLY */
 

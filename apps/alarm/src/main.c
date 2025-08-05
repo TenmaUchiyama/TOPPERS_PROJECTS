@@ -8,7 +8,6 @@
 
 void  init_gpio(EXINF exinf)
 {
-    syslog(LOG_NOTICE, "GPIO INIT START");
     RCC_AHB1ENR |= (1 << 0); 
     RCC_AHB1ENR |= (1<<1); 
 
@@ -22,38 +21,52 @@ void  init_gpio(EXINF exinf)
     GPIOA_MODER |= (0b01 << (9*2));
 
 
-    ext_tsk(); 
-
+    act_tsk(SW_TASK);
 }
 
 
-void led_task(EXINF exinf)
+void led_flashing(EXINF exinf)
 {
-    syslog(LOG_NOTICE, "LED TASK START"); 
 
-   
-    while(1)
-    {
-        GPIOA_ODR ^= (1 << 9);
-        dly_tsk(1000000);
-    }
 
-    ext_tsk();
+        GPIOA_ODR &= ~(1<<9); // Light Up
+     
+
+
 }
 
 
 void sw_task(EXINF exinf)
 {
-   
+   syslog(LOG_NOTICE, "SW TASKSTARTED");
     uint8_t prev = (GPIOB_IDR & (1 << 5)) ? 1 : 0;
+    bool_t currLedState = false;
     while(1)
     {
         uint8_t curr = (GPIOB_IDR & (1 << 5)) ? 1 : 0;
         if (prev == 1 && curr == 0)
         {
-            syslog(LOG_NOTICE, "Button Pressed"); 
+            syslog(LOG_NOTICE, "Btn pressed");
+          
+              if(GPIOA_ODR & (1 << 9)){
+                
+              syslog(LOG_NOTICE, "Starting Led");
+                GPIOA_ODR &= ~(1 << 9); //ON
+                    stp_alm(MY_ALM);
+               }else{
+                
+              syslog(LOG_NOTICE, "Stopping Led");
+                    GPIOA_ODR |= (1 << 9); //OFF
+                    sta_alm(MY_ALM,5000000);
+
+               }
+ 
+            currLedState = !currLedState;
         }
         prev =curr;
         dly_tsk(10000);
     }
+
+
+    ext_tsk();
 }
