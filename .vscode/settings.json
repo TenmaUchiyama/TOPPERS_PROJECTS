@@ -4,6 +4,7 @@
         "kernel.h": "c",
         "event_flag.h": "c",
         "t_syslog.h": "c",
-        "kernel_cfg.h": "c"
+        "kernel_cfg.h": "c",
+        "stm32f4xx_hal.h": "c"
     }
 }
